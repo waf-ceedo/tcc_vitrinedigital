@@ -1,3 +1,4 @@
+
 <?php
 
 include 'conexao.php';
@@ -30,11 +31,6 @@ RECEBER E VALIDAR PESQUISA
 if (isset($_GET['busca'])) {
 
     $busca = trim($_GET['busca']);
-
-    /*
-    Limitar o tamanho da pesquisa para evitar
-    entradas exageradamente grandes.
-    */
 
     if (strlen($busca) > 100) {
         $busca = substr($busca, 0, 100);
@@ -75,11 +71,214 @@ if (isset($_GET['categoria'])) {
 
 <title>Vitrine Digital</title>
 
+<style>
+
+/* PALETA DE CORES */
+
+:root {
+    --azul-escuro: #173B70;
+    --azul: #1769E0;
+    --preto-azulado: #101722;
+    --azul-claro: #EEF3FC;
+    --cinza-texto: #596579;
+    --branco: #FFFFFF;
+}
+
+
+/* CONFIGURAÇÕES GERAIS */
+
+body {
+    background-color: #FFFFFF;
+    color: var(--preto-azulado);
+}
+
+
+/* HERO */
+
+.hero {
+    background-color: #173B70 !important;
+    background-image: none !important;
+    color: #FFFFFF;
+}
+
+.hero::before,
+.hero::after {
+    background-image: none !important;
+}
+
+.hero h1 {
+    color: var(--branco);
+}
+
+.hero p {
+    color: #E4ECF8;
+}
+
+.hero .badge {
+    background-color: var(--branco) !important;
+    color: var(--azul-escuro) !important;
+}
+
+.hero .form-control {
+    border: none;
+}
+
+.hero .form-control:focus {
+    box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.25);
+}
+
+.hero .btn-dark {
+    background-color: var(--azul);
+    border-color: var(--azul);
+}
+
+.hero .btn-dark:hover {
+    background-color: #1257BD;
+    border-color: #1257BD;
+}
+
+
+/* CATEGORIAS */
+
+.categoria {
+    background-color: var(--branco);
+    color: var(--azul-escuro);
+    border: 1px solid #E3EAF4;
+    border-radius: 18px;
+    padding: 30px 15px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    box-shadow: 0 8px 25px rgba(16, 23, 34, 0.07);
+    transition: all 0.25s ease;
+    height: 100%;
+}
+
+.categoria h6 {
+    color: var(--preto-azulado);
+    font-weight: 700;
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.categoria:hover {
+    border-color: var(--azul);
+    box-shadow: 0 10px 28px rgba(23, 59, 112, 0.13);
+    transform: translateY(-4px);
+}
+
+
+/* TÍTULOS E ETIQUETAS */
+
+.badge.bg-primary {
+    background-color: var(--azul) !important;
+    color: var(--branco);
+}
+
+#resultados-lojas h2 {
+    color: var(--azul-escuro);
+}
+
+
+/* CARTÕES DAS LOJAS */
+
+.loja-card {
+    background-color: var(--branco);
+    border: 1px solid #E3EAF4 !important;
+    border-radius: 20px !important;
+    box-shadow: 0 8px 25px rgba(16, 23, 34, 0.09) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.loja-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 13px 30px rgba(16, 23, 34, 0.13) !important;
+}
+
+.loja-card .card-img-top {
+    height: 220px;
+    object-fit: cover;
+}
+
+.loja-card .card-body {
+    background-color: var(--branco);
+}
+
+.loja-card h4 {
+    color: var(--azul-escuro);
+}
+
+.loja-card p {
+    color: var(--cinza-texto);
+}
+
+
+/* BOTÕES */
+
+.btn-gradient {
+    background-color: var(--azul-escuro) !important;
+    background-image: none !important;
+    border: 1px solid var(--azul-escuro) !important;
+    color: var(--branco) !important;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.btn-gradient:hover {
+    background-color: var(--azul) !important;
+    border-color: var(--azul) !important;
+    background-image: none !important;
+    color: var(--branco) !important;
+}
+
+.btn-outline-dark {
+    color: var(--azul-escuro);
+    border-color: var(--azul-escuro);
+}
+
+.btn-outline-dark:hover {
+    background-color: var(--azul-escuro);
+    border-color: var(--azul-escuro);
+    color: var(--branco);
+}
+
+
+/* MENSAGEM SEM RESULTADOS */
+
+.alert-warning {
+    background-color: var(--azul-claro);
+    border-color: #D6E2F3;
+    color: var(--azul-escuro);
+}
+
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 768px) {
+
+    .hero {
+        text-align: center;
+    }
+
+    .categoria {
+        padding: 25px 10px;
+    }
+
+    .loja-card .card-img-top {
+        height: 200px;
+    }
+
+}
+
+</style>
+
 </head>
 
 <body>
 
 <?php include 'includes_site/header.php'; ?>
+
 
 <!-- HERO -->
 
@@ -102,7 +301,6 @@ if (isset($_GET['categoria'])) {
                 <p class="lead mb-4">
                     Encontre produtos, serviços e contatos em um único lugar.
                 </p>
-
 
                 <!-- PESQUISA -->
 
@@ -131,7 +329,6 @@ if (isset($_GET['categoria'])) {
                 </form>
 
             </div>
-
 
             <div class="col-lg-6 text-center">
 
@@ -170,9 +367,7 @@ if (isset($_GET['categoria'])) {
 
     </div>
 
-
     <div class="row g-4">
-
 
         <!-- MODA -->
 
@@ -311,7 +506,6 @@ if (isset($_GET['categoria'])) {
 
         </div>
 
-
     </div>
 
 </section>
@@ -319,8 +513,7 @@ if (isset($_GET['categoria'])) {
 
 <!-- LOJAS -->
 
-<section class="container pb-5">
-
+<section class="container pb-5" id="resultados-lojas">
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
 
@@ -361,9 +554,8 @@ if (isset($_GET['categoria'])) {
 
         </div>
 
-
         <a
-            href="index.php"
+            href="index.php#resultados-lojas"
             class="btn btn-outline-dark">
 
             <i class="fa-solid fa-store me-2"></i>
@@ -375,7 +567,6 @@ if (isset($_GET['categoria'])) {
 
 
     <div class="row g-4">
-
 
         <?php
 
@@ -457,10 +648,6 @@ if (isset($_GET['categoria'])) {
 
         if ($stmt) {
 
-            /*
-            Se houver parâmetros, vinculá-los.
-            */
-
             if (count($parametros) > 0) {
 
                 mysqli_stmt_bind_param(
@@ -491,26 +678,20 @@ if (isset($_GET['categoria'])) {
 
         if ($resultado && mysqli_num_rows($resultado) > 0) {
 
-
             while ($loja = mysqli_fetch_assoc($resultado)) {
 
         ?>
 
-
         <div class="col-12 col-md-6 col-lg-4">
 
-
             <div class="card loja-card border-0 shadow h-100 overflow-hidden">
-
 
                 <img
                     src="img/loja1.jpg"
                     class="card-img-top"
                     alt="<?php echo htmlspecialchars($loja['nome'], ENT_QUOTES, 'UTF-8'); ?>">
 
-
                 <div class="card-body p-4 d-flex flex-column">
-
 
                     <span class="badge bg-primary align-self-start mb-2">
 
@@ -518,20 +699,17 @@ if (isset($_GET['categoria'])) {
 
                     </span>
 
-
                     <h4 class="fw-bold mb-2">
 
                         <?php echo htmlspecialchars($loja['nome'], ENT_QUOTES, 'UTF-8'); ?>
 
                     </h4>
 
-
                     <p class="text-muted mb-4">
 
                         Loja cadastrada na Vitrine Digital.
 
                     </p>
-
 
                     <a
                         href="loja.php?id=<?php echo (int) $loja['id']; ?>"
@@ -542,15 +720,11 @@ if (isset($_GET['categoria'])) {
 
                     </a>
 
-
                 </div>
-
 
             </div>
 
-
         </div>
-
 
         <?php
 
@@ -559,7 +733,6 @@ if (isset($_GET['categoria'])) {
         } else {
 
         ?>
-
 
         <div class="col-12">
 
@@ -585,7 +758,6 @@ if (isset($_GET['categoria'])) {
 
         </div>
 
-
         <?php
 
         }
@@ -603,14 +775,46 @@ if (isset($_GET['categoria'])) {
 
         ?>
 
-
     </div>
 
 </section>
 
 
-<?php include 'includes_site/footer.php'; ?>
+<!-- ROLAGEM AUTOMÁTICA APÓS PESQUISA -->
 
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const parametros = new URLSearchParams(window.location.search);
+
+    const pesquisa = parametros.get('busca');
+
+    if (pesquisa && pesquisa.trim() !== '') {
+
+        const resultados = document.getElementById('resultados-lojas');
+
+        if (resultados) {
+
+            setTimeout(function () {
+
+                resultados.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+
+            }, 100);
+
+        }
+
+    }
+
+});
+
+</script>
+
+
+<?php include 'includes_site/footer.php'; ?>
 
 </body>
 

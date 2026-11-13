@@ -1,3 +1,4 @@
+
 <?php
 
 include '../conexao.php';
@@ -67,15 +68,107 @@ if ($stmt) {
 
 <head>
 
-    <?php include '../includes_site/head.php'; ?>
+    <?php include '../includes_painel/head.php'; ?>
 
     <title>Meus Produtos - Vitrine Digital</title>
+
+    <style>
+
+        /* FUNDO DA JANELA DE CONFIRMAÇÃO */
+
+        .modal-exclusao {
+
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 9999;
+
+        }
+
+        .modal-exclusao[hidden] {
+
+            display: none !important;
+
+        }
+
+        /* CAIXA DE CONFIRMAÇÃO */
+
+        .modal-exclusao-conteudo {
+
+            background: #ffffff;
+            width: 100%;
+            max-width: 460px;
+            border-radius: 18px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            border-top: 7px solid #dc3545;
+
+        }
+
+        .icone-alerta-exclusao {
+
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: #fce8e8;
+            color: #dc3545;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 20px;
+
+        }
+
+        .nome-produto-exclusao {
+
+            color: #dc3545;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+
+        }
+
+        .botoes-exclusao {
+
+            display: flex;
+            gap: 10px;
+
+        }
+
+        .botoes-exclusao button {
+
+            flex: 1;
+
+        }
+
+        @media (max-width: 400px) {
+
+            .modal-exclusao-conteudo {
+
+                padding: 22px;
+
+            }
+
+            .botoes-exclusao {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
 <body>
 
-<?php include '../includes_site/header.php'; ?>
+<?php include '../includes_painel/header.php'; ?>
 
 
 <section class="py-5">
@@ -89,7 +182,7 @@ if ($stmt) {
 
             <div class="alert alert-info alert-dismissible fade show shadow-sm mb-4" role="alert">
 
-                <?php echo htmlspecialchars($mensagem); ?>
+                <?php echo htmlspecialchars($mensagem, ENT_QUOTES, 'UTF-8'); ?>
 
                 <button
                     type="button"
@@ -174,14 +267,13 @@ if ($stmt) {
 
                             <!-- IMAGEM -->
 
-                            <div
-                                style="height: 250px; overflow: hidden;">
+                            <div style="height: 250px; overflow: hidden;">
 
                                 <img
-                                    src="../img/<?php echo htmlspecialchars($produto['imagem']); ?>"
+                                    src="../img/<?php echo htmlspecialchars($produto['imagem'], ENT_QUOTES, 'UTF-8'); ?>"
                                     class="w-100 h-100"
                                     style="object-fit: cover;"
-                                    alt="<?php echo htmlspecialchars($produto['nome']); ?>">
+                                    alt="<?php echo htmlspecialchars($produto['nome'], ENT_QUOTES, 'UTF-8'); ?>">
 
                             </div>
 
@@ -198,14 +290,14 @@ if ($stmt) {
 
                                 <h5 class="fw-bold mb-2">
 
-                                    <?php echo htmlspecialchars($produto['nome']); ?>
+                                    <?php echo htmlspecialchars($produto['nome'], ENT_QUOTES, 'UTF-8'); ?>
 
                                 </h5>
 
 
                                 <p class="text-muted mb-3">
 
-                                    <?php echo htmlspecialchars($produto['descricao']); ?>
+                                    <?php echo htmlspecialchars($produto['descricao'], ENT_QUOTES, 'UTF-8'); ?>
 
                                 </p>
 
@@ -240,35 +332,19 @@ if ($stmt) {
                                     </a>
 
 
-                                    <!-- FORMULÁRIO DE EXCLUSÃO -->
+                                    <!-- BOTÃO DE EXCLUSÃO -->
 
-                                    <form
-                                        method="POST"
-                                        action="excluir_produto.php"
-                                        class="flex-fill"
-                                        onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger flex-fill botao-abrir-exclusao"
+                                        data-produto-id="<?php echo (int) $produto['id']; ?>"
+                                        data-produto-nome="<?php echo htmlspecialchars($produto['nome'], ENT_QUOTES, 'UTF-8'); ?>">
 
-                                        <input
-                                            type="hidden"
-                                            name="id"
-                                            value="<?php echo (int) $produto['id']; ?>">
+                                        <i class="fa-solid fa-trash me-1"></i>
 
-                                        <input
-                                            type="hidden"
-                                            name="csrf_token"
-                                            value="<?php echo htmlspecialchars($_SESSION['csrf_excluir_produto']); ?>">
+                                        Excluir
 
-                                        <button
-                                            type="submit"
-                                            class="btn btn-danger w-100">
-
-                                            <i class="fa-solid fa-trash me-1"></i>
-
-                                            Excluir
-
-                                        </button>
-
-                                    </form>
+                                    </button>
 
 
                                 </div>
@@ -350,7 +426,197 @@ if ($stmt) {
 </section>
 
 
-<?php include '../includes_site/footer.php'; ?>
+<!-- JANELA DE CONFIRMAÇÃO DE EXCLUSÃO -->
+
+<div
+    id="modalExclusao"
+    class="modal-exclusao"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="tituloExclusao"
+    aria-hidden="true"
+    hidden>
+
+    <div class="modal-exclusao-conteudo">
+
+        <div class="icone-alerta-exclusao">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <h3 class="fw-bold text-danger mb-3" id="tituloExclusao">
+
+            Atenção! Exclusão permanente
+
+        </h3>
+
+
+        <p class="mb-2">
+
+            Você está prestes a excluir o produto:
+
+        </p>
+
+
+        <p class="nome-produto-exclusao" id="nomeProdutoExclusao"></p>
+
+
+        <p class="fw-bold mt-4 mb-4">
+
+            Deseja excluir este produto mesmo assim?
+
+        </p>
+
+
+        <form
+            method="POST"
+            action="excluir_produto.php"
+            id="formularioExclusao">
+
+            <input
+                type="hidden"
+                name="id"
+                id="idProdutoExclusao">
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="<?php echo htmlspecialchars($_SESSION['csrf_excluir_produto'], ENT_QUOTES, 'UTF-8'); ?>">
+
+            <input
+                type="hidden"
+                name="confirmacao"
+                value="SIM">
+
+
+            <div class="botoes-exclusao">
+
+                <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    id="cancelarExclusao">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-danger">
+
+                    <i class="fa-solid fa-trash me-2"></i>
+
+                    Sim, excluir
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- JAVASCRIPT DA CONFIRMAÇÃO -->
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const modal = document.getElementById('modalExclusao');
+
+    const nomeProduto = document.getElementById('nomeProdutoExclusao');
+
+    const idProduto = document.getElementById('idProdutoExclusao');
+
+    const botaoCancelar = document.getElementById('cancelarExclusao');
+
+    const botoesAbrir = document.querySelectorAll('.botao-abrir-exclusao');
+
+
+    // ABRIR JANELA
+
+    function abrirModal(id, nome) {
+
+        idProduto.value = id;
+
+        nomeProduto.textContent = nome;
+
+        modal.hidden = false;
+
+        modal.setAttribute('aria-hidden', 'false');
+
+    }
+
+
+    // FECHAR JANELA
+
+    function fecharModal() {
+
+        modal.hidden = true;
+
+        modal.setAttribute('aria-hidden', 'true');
+
+    }
+
+
+    // CLIQUE NO BOTÃO EXCLUIR
+
+    botoesAbrir.forEach(function (botao) {
+
+        botao.addEventListener('click', function () {
+
+            abrirModal(
+                this.dataset.produtoId,
+                this.dataset.produtoNome
+            );
+
+        });
+
+    });
+
+
+    // CANCELAR
+
+    botaoCancelar.addEventListener('click', fecharModal);
+
+
+    // CLICAR FORA DA JANELA
+
+    modal.addEventListener('click', function (event) {
+
+        if (event.target === modal) {
+
+            fecharModal();
+
+        }
+
+    });
+
+
+    // TECLA ESC
+
+    document.addEventListener('keydown', function (event) {
+
+        if (event.key === 'Escape' && !modal.hidden) {
+
+            fecharModal();
+
+        }
+
+    });
+
+});
+
+</script>
+
+
+<?php include '../includes_painel/footer.php'; ?>
 
 
 </body>
@@ -360,7 +626,9 @@ if ($stmt) {
 <?php
 
 if ($stmt) {
+
     mysqli_stmt_close($stmt);
+
 }
 
 ?>

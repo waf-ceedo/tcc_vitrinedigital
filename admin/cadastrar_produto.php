@@ -1,3 +1,4 @@
+
 <?php
 
 include '../conexao.php';
@@ -166,9 +167,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $mensagem = "Produto cadastrado com sucesso!";
                         $tipo_mensagem = "success";
 
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | REGISTRAR ATIVIDADE NO HISTÓRICO
+                        |--------------------------------------------------------------------------
+                        */
+
+                        $tipo_atividade = "cadastro";
+
+                        $descricao_atividade = "Cadastrou o produto: " . $nome;
+
+                        $sql_atividade = "INSERT INTO atividades_loja
+                                          (loja_id, tipo, descricao)
+                                          VALUES (?, ?, ?)";
+
+                        $stmt_atividade = mysqli_prepare(
+                            $conn,
+                            $sql_atividade
+                        );
+
+                        if ($stmt_atividade) {
+
+                            mysqli_stmt_bind_param(
+                                $stmt_atividade,
+                                "iss",
+                                $loja_id,
+                                $tipo_atividade,
+                                $descricao_atividade
+                            );
+
+                            mysqli_stmt_execute($stmt_atividade);
+
+                            mysqli_stmt_close($stmt_atividade);
+
+                        }
+
+
                         /*
                         | Gera um novo token depois de uma operação concluída.
                         */
+
                         $_SESSION['csrf_cadastrar_produto'] = bin2hex(random_bytes(32));
                         $csrf_token = $_SESSION['csrf_cadastrar_produto'];
 
@@ -177,6 +216,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         /*
                         | Não mostrar o erro interno do MySQL ao usuário.
                         */
+
                         $mensagem = "Não foi possível cadastrar o produto. Tente novamente.";
                         $tipo_mensagem = "danger";
                     }

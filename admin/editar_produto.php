@@ -1,3 +1,4 @@
+
 <?php
 
 include '../conexao.php';
@@ -198,6 +199,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (mysqli_stmt_execute($stmt)) {
 
                         mysqli_stmt_close($stmt);
+
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | REGISTRAR ATIVIDADE NO HISTÓRICO
+                        |--------------------------------------------------------------------------
+                        */
+
+                        $tipo_atividade = "edicao";
+
+                        $descricao_atividade = "Editou o produto: " . $nome;
+
+                        $sql_atividade = "INSERT INTO atividades_loja
+                                          (loja_id, tipo, descricao)
+                                          VALUES (?, ?, ?)";
+
+                        $stmt_atividade = mysqli_prepare(
+                            $conn,
+                            $sql_atividade
+                        );
+
+                        if ($stmt_atividade) {
+
+                            mysqli_stmt_bind_param(
+                                $stmt_atividade,
+                                "iss",
+                                $loja_id,
+                                $tipo_atividade,
+                                $descricao_atividade
+                            );
+
+                            mysqli_stmt_execute($stmt_atividade);
+
+                            mysqli_stmt_close($stmt_atividade);
+
+                        }
+
 
                         // NOVO TOKEN CSRF
 

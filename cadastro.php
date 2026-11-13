@@ -1,3 +1,4 @@
+
 <?php
 
 session_start();
@@ -246,20 +247,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $mensagem = "Loja cadastrada com sucesso!";
                                 $tipo_mensagem = "success";
 
-                                /*
-                                 * Gera um novo token depois
-                                 * de um cadastro bem-sucedido.
-                                 */
                                 $_SESSION['csrf_token'] = bin2hex(
                                     random_bytes(32)
                                 );
 
                             } else {
 
-                                /*
-                                 * Caso o banco rejeite o e-mail
-                                 * por causa da regra UNIQUE.
-                                 */
                                 if (mysqli_errno($conn) == 1062) {
 
                                     $mensagem = "Este e-mail já está cadastrado.";
@@ -292,6 +285,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include 'includes_site/head.php'; ?>
 
     <title>Cadastrar Loja - Vitrine Digital</title>
+
+    <style>
+
+        /* BOTÃO CADASTRAR */
+
+        .btn-cadastro {
+            background-color: #173B70 !important;
+            background-image: none !important;
+            border: 1px solid #173B70 !important;
+            color: #FFFFFF !important;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-cadastro:hover {
+            background-color: #1769E0 !important;
+            background-image: none !important;
+            border-color: #1769E0 !important;
+            color: #FFFFFF !important;
+        }
+
+        .btn-cadastro:focus {
+            box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.25);
+        }
+
+    </style>
 
 </head>
 
@@ -708,7 +728,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <button
                                 type="submit"
-                                class="btn btn-gradient btn-lg w-100">
+                                class="btn btn-cadastro btn-lg w-100">
 
                                 <i class="fa-solid fa-store me-2"></i>
 

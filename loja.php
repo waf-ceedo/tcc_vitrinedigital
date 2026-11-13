@@ -1,3 +1,4 @@
+
 <?php
 
 include 'conexao.php';
@@ -18,6 +19,18 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 
 $id = (int) $_GET['id'];
+
+
+/*
+------------------------------------------------
+IDENTIFICAR ACESSO PELO PAINEL ADMINISTRATIVO
+------------------------------------------------
+*/
+
+$origem_admin = (
+    isset($_GET['origem']) &&
+    $_GET['origem'] === 'admin'
+);
 
 
 /*
@@ -94,6 +107,44 @@ mysqli_stmt_close($stmt_loja);
 
 /*
 ------------------------------------------------
+REGISTRAR VISUALIZAÇÃO DA LOJA
+
+NÃO CONTABILIZAR VISUALIZAÇÕES DO PAINEL ADMINISTRATIVO
+------------------------------------------------
+*/
+
+if (!$origem_admin) {
+
+    $sql_visualizacao = "
+        INSERT INTO visualizacoes_loja
+        (loja_id, produto_id)
+        VALUES (?, NULL)
+    ";
+
+    $stmt_visualizacao = mysqli_prepare(
+        $conn,
+        $sql_visualizacao
+    );
+
+    if ($stmt_visualizacao) {
+
+        mysqli_stmt_bind_param(
+            $stmt_visualizacao,
+            "i",
+            $id
+        );
+
+        mysqli_stmt_execute($stmt_visualizacao);
+
+        mysqli_stmt_close($stmt_visualizacao);
+
+    }
+
+}
+
+
+/*
+------------------------------------------------
 FUNÇÃO PARA VALIDAR NOME DE IMAGEM
 ------------------------------------------------
 */
@@ -108,23 +159,12 @@ function imagemSegura($nome, $imagemPadrao)
     }
 
 
-    /*
-    Impedir caminhos como:
-    ../arquivo
-    ../../arquivo
-    pasta/arquivo
-    */
-
     if (basename($nome) !== $nome) {
 
         return $imagemPadrao;
 
     }
 
-
-    /*
-    Permitir somente extensões de imagem
-    */
 
     $extensao = strtolower(
         pathinfo($nome, PATHINFO_EXTENSION)
@@ -144,10 +184,6 @@ function imagemSegura($nome, $imagemPadrao)
 
     }
 
-
-    /*
-    Verificar se o arquivo realmente existe
-    */
 
     $caminho = __DIR__ . "/img/" . $nome;
 
@@ -238,6 +274,27 @@ $logo = "img/" . $logo_nome;
                 class="w-100"
                 style="height:300px; object-fit:cover;"
                 alt="Foto de capa da loja">
+
+
+            <!-- BOTÃO VOLTAR AO PAINEL -->
+
+            <?php if ($origem_admin) { ?>
+
+                <div class="d-flex justify-content-end px-4 pt-3">
+
+                    <a
+                        href="admin/dashboard.php"
+                        class="btn btn-outline-dark rounded-3">
+
+                        <i class="fa-solid fa-arrow-left me-2"></i>
+
+                        Voltar ao painel administrativo
+
+                    </a>
+
+                </div>
+
+            <?php } ?>
 
 
             <!-- INFORMAÇÕES DA LOJA -->
@@ -596,6 +653,33 @@ $logo = "img/" . $logo_nome;
             }
 
 
+            /*
+            ------------------------------------------------
+            PREPARAR REGISTRO DE EXIBIÇÃO DOS PRODUTOS
+
+            CADA PRODUTO EXIBIDO NA VITRINE GERA UM REGISTRO.
+            VISUALIZAÇÕES DO PAINEL ADMINISTRATIVO NÃO CONTAM.
+            ------------------------------------------------
+            */
+
+            $stmt_exibicao_produto = false;
+
+            if (!$origem_admin) {
+
+                $sql_exibicao = "
+                    INSERT INTO visualizacoes_loja
+                    (loja_id, produto_id)
+                    VALUES (?, ?)
+                ";
+
+                $stmt_exibicao_produto = mysqli_prepare(
+                    $conn,
+                    $sql_exibicao
+                );
+
+            }
+
+
             if (
                 $resultado &&
                 mysqli_num_rows($resultado) > 0
@@ -605,6 +689,31 @@ $logo = "img/" . $logo_nome;
                 while (
                     $produto = mysqli_fetch_assoc($resultado)
                 ) {
+
+
+                    /*
+                    ----------------------------------------
+                    REGISTRAR EXIBIÇÃO DO PRODUTO
+                    ----------------------------------------
+                    */
+
+                    if ($stmt_exibicao_produto) {
+
+                        $produto_id_visualizacao = (int) $produto['id'];
+
+                        mysqli_stmt_bind_param(
+                            $stmt_exibicao_produto,
+                            "ii",
+                            $id,
+                            $produto_id_visualizacao
+                        );
+
+                        mysqli_stmt_execute(
+                            $stmt_exibicao_produto
+                        );
+
+                    }
+
 
                     /*
                     ----------------------------------------
@@ -770,6 +879,15 @@ $logo = "img/" . $logo_nome;
 
 
             <?php
+
+            }
+
+
+            if ($stmt_exibicao_produto) {
+
+                mysqli_stmt_close(
+                    $stmt_exibicao_produto
+                );
 
             }
 

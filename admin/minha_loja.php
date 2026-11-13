@@ -782,7 +782,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
 
-    <?php include '../includes_site/head.php'; ?>
+    <?php include '../includes_painel/head.php'; ?>
 
     <title>Minha Loja - Vitrine Digital</title>
 
@@ -790,7 +790,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
 
-<?php include '../includes_site/header.php'; ?>
+<?php include '../includes_painel/header.php'; ?>
 
 
 <section class="py-5">
@@ -1374,7 +1374,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </section>
 
 
-<?php include '../includes_site/footer.php'; ?>
+<?php include '../includes_painel/footer.php'; ?>
 
 
 </body>

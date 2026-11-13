@@ -1,59 +1,171 @@
-<footer class="bg-dark text-white mt-5">
+
+<footer style="background-color: #101722; color: #ffffff;">
 
     <div class="container py-5">
 
-        <div class="row g-4 align-items-center">
+        <div class="row g-5">
 
-            <!-- SOBRE -->
 
-            <div class="col-md-8">
+            <!-- IDENTIDADE DA VITRINE -->
 
-                <h5 class="fw-bold mb-2">
+            <div class="col-lg-5 col-md-6">
 
-                    <i class="fa-solid fa-store me-2"></i>
+                <a
+                    href="/tcc/index.php"
+                    class="text-decoration-none text-white">
 
-                    Vitrine Digital
+                    <h4 class="fw-bold mb-3">
 
-                </h5>
+                        <i class="fa-solid fa-store me-2"
+                           style="color: #3985ff;"></i>
 
-                <p class="text-white-50 mb-0">
+                        Vitrine Digital
 
-                    Conectando lojas, produtos e clientes
-                    em um único lugar.
+                    </h4>
+
+                </a>
+
+                <p class="text-white-50 mb-3"
+                   style="max-width: 380px; line-height: 1.8;">
+
+                    Conectando lojas, produtos e clientes em um único lugar.
+                    Descubra novos negócios e valorize o comércio da sua região!
+
+                </p>
+
+                <p class="small mb-0" style="color: #3985ff;">
+
+                    Sua cidade, suas lojas, novas possibilidades.
 
                 </p>
 
             </div>
 
 
-            <!-- ÍCONE -->
+            <!-- NAVEGAÇÃO -->
 
-            <div class="col-md-4 text-md-end text-center">
+            <div class="col-lg-3 col-md-6">
 
-                <div
-                    class="d-inline-flex align-items-center justify-content-center
-                           bg-primary bg-opacity-25 rounded-circle"
-                    style="width:70px; height:70px;">
+                <h6 class="fw-bold mb-4">
 
-                    <i class="fa-solid fa-shop fs-3"></i>
+                    Navegação
 
-                </div>
+                </h6>
+
+                <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+
+                    <li>
+
+                        <a
+                            href="/tcc/index.php"
+                            class="text-white-50 text-decoration-none footer-link">
+
+                            <i class="fa-solid fa-house me-2"></i>
+
+                            Início
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a
+                            href="/tcc/sobre.php"
+                            class="text-white-50 text-decoration-none footer-link">
+
+                            <i class="fa-solid fa-circle-info me-2"></i>
+
+                            Sobre
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a
+                            href="/tcc/login.php"
+                            class="text-white-50 text-decoration-none footer-link">
+
+                            <i class="fa-solid fa-right-to-bracket me-2"></i>
+
+                            Entrar
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a
+                            href="/tcc/cadastro.php"
+                            class="text-white-50 text-decoration-none footer-link">
+
+                            <i class="fa-solid fa-store me-2"></i>
+
+                            Cadastrar loja
+
+                        </a>
+
+                    </li>
+
+                </ul>
 
             </div>
+
+
+            <!-- CONVITE -->
+
+            <div class="col-lg-4 col-md-12">
+
+                <h6 class="fw-bold mb-3">
+
+                    Explore a Vitrine Digital
+
+                </h6>
+
+                <p class="text-white-50 mb-4"
+                   style="line-height: 1.8;">
+
+                    Tem sempre uma loja nova para conhecer.
+                    Explore as categorias e descubra o que existe
+                    de especial na sua região!
+
+                </p>
+
+                <a
+                    href="/tcc/index.php#resultados-lojas"
+                    class="btn rounded-3 px-4 py-2 text-white fw-semibold"
+                    style="background-color: #1769e0; border: none;">
+
+                    <i class="fa-solid fa-compass me-2"></i>
+
+                    Explorar lojas
+
+                </a>
+
+            </div>
+
 
         </div>
 
 
-        <hr class="border-secondary my-4">
+        <!-- DIVISÓRIA -->
+
+        <hr class="my-5"
+            style="border-color: #344052; opacity: 1;">
 
 
-        <!-- COPYRIGHT -->
+        <!-- DIREITOS RESERVADOS -->
 
-        <div class="text-center">
+        <div class="d-flex flex-column flex-md-row
+                    justify-content-between align-items-center gap-3">
 
-            <p class="mb-0 text-white-50">
+            <p class="text-white-50 small mb-0">
 
-                © 2026
+                © <?php echo date('Y'); ?>
+
                 <strong class="text-white">
                     Vitrine Digital
                 </strong>
@@ -62,11 +174,31 @@
 
             </p>
 
+            <p class="small mb-0" style="color: #8da3c2;">
+
+                Feito para conectar pessoas e negócios.
+
+            </p>
+
         </div>
+
 
     </div>
 
 </footer>
+
+
+<style>
+
+    .footer-link {
+        transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+        color: #3985ff !important;
+    }
+
+</style>
 
 
 <!-- BOOTSTRAP JS -->
