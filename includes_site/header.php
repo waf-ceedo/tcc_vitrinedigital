@@ -1,30 +1,49 @@
 
 <?php
 
+// ================================================
 // IDENTIFICAR SE O USUÁRIO ESTÁ NA ÁREA ADMINISTRATIVA
+// ================================================
 
 $esta_na_area_admin = (
     strpos($_SERVER['PHP_SELF'], '/admin/') !== false
 );
 
 
-// DEFINIR DESTINO DA LOGO
+// ================================================
+// IDENTIFICAR O CAMINHO BASE DO PROJETO
+// ================================================
+
+$caminho_script = $_SERVER['SCRIPT_NAME'];
 
 if ($esta_na_area_admin) {
-
-    $link_logo = '/tcc/admin/dashboard.php';
-
+    $base_projeto = dirname(dirname($caminho_script));
 } else {
+    $base_projeto = dirname($caminho_script);
+}
 
-    $link_logo = '/tcc/index.php';
+$base_projeto = rtrim($base_projeto, '/\\');
 
+if ($base_projeto === '.' || $base_projeto === '/') {
+    $base_projeto = '';
 }
 
 
-// IDENTIFICAR O DESTINO DA OPÇÃO INÍCIO
+// ================================================
+// FUNÇÃO PARA MONTAR OS LINKS
+// ================================================
+
+$montar_link = function ($caminho) use ($base_projeto) {
+    return $base_projeto . '/' . ltrim($caminho, '/');
+};
+
+
+// ================================================
+// IDENTIFICAR A ORIGEM DA NAVEGAÇÃO
+// ================================================
 
 $inicio_no_admin = (
-    strpos($_SERVER['PHP_SELF'], '/admin/') !== false ||
+    $esta_na_area_admin ||
     (
         isset($_GET['origem']) &&
         $_GET['origem'] === 'admin'
@@ -32,199 +51,130 @@ $inicio_no_admin = (
 );
 
 
+// ================================================
+// DEFINIR DESTINO DA LOGO
+// ================================================
+
+if ($esta_na_area_admin) {
+    $link_logo = $montar_link('admin/dashboard.php');
+} else {
+    $link_logo = $montar_link('index.php');
+}
+
+
+// ================================================
 // DEFINIR DESTINO DO INÍCIO
+// ================================================
 
 if ($inicio_no_admin) {
-
-    $link_inicio = '/tcc/admin/dashboard.php';
-
+    $link_inicio = $montar_link('admin/dashboard.php');
 } else {
-
-    $link_inicio = '/tcc/index.php';
-
+    $link_inicio = $montar_link('index.php');
 }
 
 ?>
 
 <style>
-
-/* CABEÇALHO */
-
-.site-header {
+.site-header .navbar {
     background-color: #101722 !important;
-    padding: 10px 0;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
 }
-
-
-/* LOGO */
-
-.site-header .navbar-brand {
-    color: #FFFFFF !important;
-    font-size: 1.5rem;
-    font-weight: 700;
-    transition: color 0.2s ease;
-}
-
-.site-header .navbar-brand i {
-    color: #FFFFFF;
-}
-
-.site-header .navbar-brand:hover {
-    color: #1769E0 !important;
-}
-
-
-/* LINKS DO MENU */
 
 .site-header .nav-link {
-    color: #D5DCE7 !important;
+    color: #ffffff !important;
     font-weight: 500;
-    padding: 10px 14px !important;
-    transition: color 0.2s ease;
-}
-
-.site-header .nav-link i {
-    color: #AEB9C9;
-    transition: color 0.2s ease;
+    font-size: 15px;
+    padding: 9px 12px !important;
+    transition: color 0.25s ease;
 }
 
 .site-header .nav-link:hover {
-    color: #FFFFFF !important;
+    color: #3985ff !important;
 }
 
-.site-header .nav-link:hover i {
-    color: #1769E0;
+.site-header .nav-link i {
+    margin-right: 5px;
 }
 
-
-/* BOTÃO DO MENU MOBILE */
-
-.site-header .navbar-toggler {
-    border-color: rgba(255, 255, 255, 0.3);
+.site-header .navbar-brand {
+    color: #ffffff !important;
+    font-size: 22px;
 }
 
-.site-header .navbar-toggler:focus {
-    box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.25);
+.site-header .navbar-brand i {
+    color: #3985ff;
 }
-
-
-/* RESPONSIVIDADE */
-
-@media (max-width: 991px) {
-
-    .site-header .navbar-collapse {
-        padding-top: 15px;
-    }
-
-    .site-header .nav-link {
-        padding: 12px 5px !important;
-    }
-
-}
-
 </style>
 
 
-<nav class="navbar navbar-expand-lg navbar-dark site-header">
+<header class="site-header">
 
-    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark">
 
-        <!-- LOGO / NOME -->
+        <div class="container">
 
-        <a
-            class="navbar-brand fw-bold d-flex align-items-center"
-            href="<?php echo $link_logo; ?>">
+            <a class="navbar-brand fw-bold"
+               href="<?php echo htmlspecialchars($link_logo, ENT_QUOTES, 'UTF-8'); ?>">
 
-            <i class="fa-solid fa-store me-2"></i>
+                <i class="fa-solid fa-store me-2"></i>
+                Vitrine Digital
 
-            Vitrine Digital
+            </a>
 
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSite"
+                aria-controls="navbarSite"
+                aria-expanded="false"
+                aria-label="Alternar navegação">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <div class="collapse navbar-collapse" id="navbarSite">
+<ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+
+    <li class="nav-item">
+        <a class="nav-link"
+           href="<?php echo htmlspecialchars($link_inicio, ENT_QUOTES, 'UTF-8'); ?>">
+            <i class="fa-solid fa-house"></i>
+            Início
         </a>
+    </li>
 
+    <li class="nav-item">
+        <a class="nav-link"
+           href="<?php
+           echo htmlspecialchars(
+               $montar_link('sobre.php') .
+               ($inicio_no_admin ? '?origem=admin' : ''),
+               ENT_QUOTES,
+               'UTF-8'
+           );
+           ?>">
+            <i class="fa-solid fa-circle-info"></i>
+            Sobre
+        </a>
+    </li>
 
-        <!-- BOTÃO MOBILE -->
+    <li class="nav-item">
+        <a class="nav-link"
+           href="<?php echo htmlspecialchars($montar_link('login.php'), ENT_QUOTES, 'UTF-8'); ?>">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            Admin
+        </a>
+    </li>
 
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#menu"
-            aria-controls="menu"
-            aria-expanded="false"
-            aria-label="Abrir menu">
+</ul>
 
-            <span class="navbar-toggler-icon"></span>
-
-        </button>
-
-
-        <!-- MENU -->
-
-        <div
-            class="collapse navbar-collapse"
-            id="menu">
-
-            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-
-
-                <!-- INÍCIO -->
-
-                <li class="nav-item">
-
-                    <a
-                        class="nav-link px-3"
-                        href="<?php echo $link_inicio; ?>">
-
-                        <i class="fa-solid fa-house me-1"></i>
-
-                        Início
-
-                    </a>
-
-                </li>
-
-
-                <!-- SOBRE -->
-
-                <li class="nav-item">
-
-                    <a
-                        class="nav-link px-3"
-                        href="<?php echo $inicio_no_admin ? '/tcc/sobre.php?origem=admin' : '/tcc/sobre.php'; ?>">
-
-                        <i class="fa-solid fa-circle-info me-1"></i>
-
-                        Sobre
-
-                    </a>
-
-                </li>
-
-
-                <!-- ADMIN -->
-
-                <li class="nav-item">
-
-                    <a
-                        class="nav-link px-3"
-                        href="/tcc/login.php">
-
-                        <i class="fa-solid fa-right-to-bracket me-1"></i>
-
-                        Admin
-
-                    </a>
-
-                </li>
-
-
-                <!-- CADASTRAR -->
-
-            </ul>
+            </div>
 
         </div>
 
-    </div>
+    </nav>
 
-</nav>
+</header>

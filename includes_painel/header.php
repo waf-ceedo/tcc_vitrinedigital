@@ -5,7 +5,7 @@
     <div class="container">
 
         <a class="navbar-brand fw-bold text-white"
-           href="/tcc/admin/dashboard.php">
+           href="dashboard.php">
 
             <i class="fa-solid fa-store me-2"
                style="color: #3985ff;"></i>
@@ -33,7 +33,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link text-white"
-                       href="/tcc/admin/dashboard.php">
+                       href="dashboard.php">
                         <i class="fa-solid fa-house me-1"></i>
                         Início
                     </a>
@@ -41,7 +41,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link text-white"
-                       href="/tcc/admin/produtos.php">
+                       href="produtos.php">
                         <i class="fa-solid fa-box me-1"></i>
                         Produtos
                     </a>
@@ -49,7 +49,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link text-white"
-                       href="/tcc/admin/minha_loja.php">
+                       href="minha_loja.php">
                         <i class="fa-solid fa-store me-1"></i>
                         Minha loja
                     </a>
@@ -57,7 +57,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link text-danger"
-                       href="/tcc/admin/sair.php">
+                       href="sair.php">
                         <i class="fa-solid fa-right-from-bracket me-1"></i>
                         Sair
                     </a>

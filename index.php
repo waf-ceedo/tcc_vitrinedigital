@@ -780,17 +780,39 @@ body {
 </section>
 
 
-<!-- ROLAGEM AUTOMÁTICA APÓS PESQUISA -->
+<!-- ROLAGEM AUTOMÁTICA APÓS PESQUISA OU SELEÇÃO DE CATEGORIA -->
 
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
 
+    // IDENTIFICAR OS PARÂMETROS DA URL
+
     const parametros = new URLSearchParams(window.location.search);
 
     const pesquisa = parametros.get('busca');
+    const categoria = parametros.get('categoria');
 
-    if (pesquisa && pesquisa.trim() !== '') {
+
+    // VERIFICAR SE EXISTE PESQUISA
+
+    const existePesquisa = (
+        pesquisa !== null &&
+        pesquisa.trim() !== ''
+    );
+
+
+    // VERIFICAR SE EXISTE CATEGORIA SELECIONADA
+
+    const existeCategoria = (
+        categoria !== null &&
+        categoria.trim() !== ''
+    );
+
+
+    // REALIZAR A ROLAGEM AUTOMÁTICA
+
+    if (existePesquisa || existeCategoria) {
 
         const resultados = document.getElementById('resultados-lojas');
 
@@ -799,8 +821,11 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(function () {
 
                 resultados.scrollIntoView({
+
                     behavior: 'smooth',
+
                     block: 'start'
+
                 });
 
             }, 100);
