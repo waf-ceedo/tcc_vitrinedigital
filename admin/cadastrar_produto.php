@@ -267,7 +267,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <!-- CABEÇALHO -->
 
-                        <div class="text-center mb-5">
+                        <div class="text-center mb-4">
 
                             <span class="badge bg-primary px-3 py-2 mb-3">
                                 📦 Área administrativa
@@ -284,29 +284,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
 
 
-                        <!-- MENSAGEM -->
-
-                        <?php if ($mensagem != "") { ?>
-
-                            <div class="alert alert-<?php echo htmlspecialchars($tipo_mensagem); ?> text-center mb-4">
-
-                                <?php if ($tipo_mensagem == "success") { ?>
-
-                                    <i class="fa-solid fa-circle-check me-2"></i>
-
-                                <?php } else { ?>
-
-                                    <i class="fa-solid fa-circle-exclamation me-2"></i>
-
-                                <?php } ?>
-
-                                <?php echo htmlspecialchars($mensagem); ?>
-
-                            </div>
-
-                        <?php } ?>
-
-
                         <form method="POST">
 
                             <!-- PROTEÇÃO CSRF -->
@@ -315,6 +292,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 type="hidden"
                                 name="csrf_token"
                                 value="<?php echo htmlspecialchars($csrf_token); ?>">
+
+
+                            <!-- BOTÕES ACIMA DO CADASTRO -->
+
+                            <div class="d-flex flex-column flex-sm-row gap-2 mb-4">
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary btn-lg flex-fill">
+
+                                    <i class="fa-solid fa-plus me-2"></i>
+
+                                    Cadastrar Produto
+
+                                </button>
+
+
+                                <a
+                                    href="produtos.php"
+                                    class="btn btn-outline-dark btn-lg flex-fill">
+
+                                    <i class="fa-solid fa-arrow-left me-2"></i>
+
+                                    Voltar
+
+                                </a>
+
+                            </div>
+
+
+                            <!-- MENSAGEM -->
+
+                            <?php if ($mensagem != "") { ?>
+
+                                <div class="alert alert-<?php echo htmlspecialchars($tipo_mensagem); ?> text-center mb-4">
+
+                                    <?php if ($tipo_mensagem == "success") { ?>
+
+                                        <i class="fa-solid fa-circle-check me-2"></i>
+
+                                    <?php } else { ?>
+
+                                        <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+                                    <?php } ?>
+
+                                    <?php echo htmlspecialchars($mensagem); ?>
+
+                                </div>
+
+                            <?php } ?>
 
 
                             <!-- INFORMAÇÕES DO PRODUTO -->
@@ -441,37 +469,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
 
                             </div>
-
-
-                            <!-- BOTÕES -->
-
-                            <div class="d-flex flex-column flex-sm-row gap-2 mt-5">
-
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary btn-lg flex-fill">
-
-                                    <i class="fa-solid fa-plus me-2"></i>
-
-                                    Cadastrar Produto
-
-                                </button>
-
-
-                                <a
-                                    href="produtos.php"
-                                    class="btn btn-outline-dark btn-lg flex-fill">
-
-                                    <i class="fa-solid fa-arrow-left me-2"></i>
-
-                                    Voltar
-
-                                </a>
-
-
-                            </div>
-
 
                         </form>
 

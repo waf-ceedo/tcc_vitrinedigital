@@ -1,4 +1,3 @@
-
 <?php
 
 include 'conexao.php';
@@ -398,28 +397,43 @@ $logo = "img/" . $logo_nome;
 
                                 <?php
 
-                                $instagram = ltrim(
-                                    trim($loja['instagram']),
-                                    '@'
-                                );
+                                /*
+                                ----------------------------------------
+                                TRATAR NOME DE USUÁRIO DO INSTAGRAM
+
+                                ACEITA:
+                                nomedaloja
+                                @nomedaloja
+
+                                O LINK É MONTADO AUTOMATICAMENTE.
+                                ----------------------------------------
+                                */
+
+                                $instagram = trim($loja['instagram']);
+
+                                $instagram = ltrim($instagram, '@');
 
                                 ?>
 
-                                <a
-                                    href="https://instagram.com/<?php echo htmlspecialchars(
-                                        $instagram,
-                                        ENT_QUOTES,
-                                        'UTF-8'
-                                    ); ?>"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="btn btn-outline-danger">
+                                <?php if ($instagram != "") { ?>
 
-                                    <i class="fa-brands fa-instagram me-2"></i>
+                                    <a
+                                        href="https://www.instagram.com/<?php echo htmlspecialchars(
+                                            $instagram,
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ); ?>"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="btn btn-outline-danger">
 
-                                    Instagram
+                                        <i class="fa-brands fa-instagram me-2"></i>
 
-                                </a>
+                                        Instagram
+
+                                    </a>
+
+                                <?php } ?>
 
                             <?php } ?>
 
@@ -916,4 +930,4 @@ $logo = "img/" . $logo_nome;
 
 </body>
 
-</html>
+</html> 

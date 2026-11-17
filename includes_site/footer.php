@@ -85,6 +85,20 @@
                     <li>
 
                         <a
+                            href="/tcc/conteudo-teorico.php"
+                            class="text-white-50 text-decoration-none footer-link">
+
+                            <i class="fa-solid fa-circle-info me-2"></i>
+
+                            TCC
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a
                             href="/tcc/login.php"
                             class="text-white-50 text-decoration-none footer-link">
 
@@ -96,20 +110,7 @@
 
                     </li>
 
-                    <li>
-
-                        <a
-                            href="/tcc/cadastro.php"
-                            class="text-white-50 text-decoration-none footer-link">
-
-                            <i class="fa-solid fa-store me-2"></i>
-
-                            Cadastrar loja
-
-                        </a>
-
-                    </li>
-
+                   
                 </ul>
 
             </div>

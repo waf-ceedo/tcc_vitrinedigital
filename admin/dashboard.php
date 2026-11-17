@@ -1,3 +1,4 @@
+
 <?php
 
 include '../conexao.php';
@@ -8,24 +9,18 @@ include '../verifica_login.php';
 
 $loja_id = (int) $_SESSION['loja_id'];
 
+
 // ================================================
 // LINK PÚBLICO PARA COMPARTILHAMENTO
 // ================================================
 
-$protocolo = (
-    !empty($_SERVER['HTTPS']) &&
-    $_SERVER['HTTPS'] !== 'off'
-) ? 'https' : 'http';
+// DOMÍNIO OFICIAL DO SITE PUBLICADO
 
-$host_atual = $_SERVER['HTTP_HOST'] ?? '';
+$dominio_publico = 'https://vitrinedigital.ceedo.com.br';
 
-$caminho_script = $_SERVER['SCRIPT_NAME'] ?? '/admin/dashboard.php';
-$caminho_admin = dirname($caminho_script);
-$caminho_projeto = rtrim(dirname($caminho_admin), '/\\');
+// GERAR LINK DIRETO PARA A LOJA
 
-$link_loja_publica = $protocolo . '://' .
-    $host_atual .
-    $caminho_projeto .
+$link_loja_publica = $dominio_publico .
     '/loja.php?id=' . $loja_id;
 
 
@@ -804,7 +799,9 @@ if ($stmt_produtos_exibidos) {
                     </div>
 
                 </div>
-                                <!-- PRODUTO MAIS BARATO -->
+
+
+                <!-- PRODUTO MAIS BARATO -->
 
                 <div class="col-12 col-md-4">
 
@@ -1183,7 +1180,9 @@ if ($stmt_produtos_exibidos) {
             </div>
 
         </div>
-                <!-- HISTÓRICO DE ATIVIDADES -->
+
+
+        <!-- HISTÓRICO DE ATIVIDADES -->
 
         <div class="historico-card mb-5">
 
@@ -1440,129 +1439,132 @@ if ($stmt_produtos_exibidos) {
 
         </div>
 
+
         <!-- COMPARTILHAR MINHA LOJA -->
 
-<div class="cadastro-card mt-5">
+        <div class="cadastro-card mt-5">
 
-    <div class="d-flex align-items-start gap-3 mb-3">
+            <div class="d-flex align-items-start gap-3 mb-3">
 
-        <div
-            class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-4"
-            style="width:58px; height:58px; min-width:58px;">
+                <div
+                    class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-4"
+                    style="width:58px; height:58px; min-width:58px;">
 
-            <i class="fa-solid fa-share-nodes text-primary fs-4"></i>
+                    <i class="fa-solid fa-share-nodes text-primary fs-4"></i>
 
-        </div>
+                </div>
 
-        <div>
+                <div>
 
-            <h4 class="cadastro-titulo mb-2">
-                Compartilhe sua loja
-            </h4>
+                    <h4 class="cadastro-titulo mb-2">
+                        Compartilhe sua loja
+                    </h4>
 
-            <p class="text-muted mb-0">
-                Copie o endereço da sua vitrine pública e envie para seus clientes.
+                    <p class="text-muted mb-0">
+                        Copie o endereço da sua vitrine pública e envie para seus clientes.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <label for="linkLojaPublica" class="form-label fw-semibold">
+                Link público da sua loja
+            </label>
+
+            <div class="input-group">
+
+                <input
+                    type="text"
+                    id="linkLojaPublica"
+                    class="form-control"
+                    value="<?php echo htmlspecialchars($link_loja_publica, ENT_QUOTES, 'UTF-8'); ?>"
+                    readonly>
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="botaoCopiarLink"
+                    onclick="copiarLinkLoja()">
+
+                    <i class="fa-solid fa-copy me-2"></i>
+                    Copiar link
+
+                </button>
+
+                <a
+                    href="https://wa.me/?text=<?php
+                        echo urlencode(
+                            'Conheça minha loja na Vitrine Digital: ' .
+                            $link_loja_publica
+                        );
+                    ?>"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-success">
+
+                    <i class="fab fa-whatsapp"></i>
+                    Compartilhar no WhatsApp
+
+                </a>
+
+            </div>
+
+            <p
+                id="mensagemCopiaLink"
+                class="small mt-2 mb-0"
+                role="status"
+                aria-live="polite">
             </p>
 
         </div>
 
-    </div>
 
+        <script>
 
-    <label for="linkLojaPublica" class="form-label fw-semibold">
-        Link público da sua loja
-    </label>
+            async function copiarLinkLoja() {
 
-    <div class="input-group">
+                const campoLink = document.getElementById('linkLojaPublica');
+                const mensagem = document.getElementById('mensagemCopiaLink');
 
-        <input
-            type="text"
-            id="linkLojaPublica"
-            class="form-control"
-            value="<?php echo htmlspecialchars($link_loja_publica, ENT_QUOTES, 'UTF-8'); ?>"
-            readonly>
+                try {
 
-        <button
-            type="button"
-            class="btn btn-primary"
-            id="botaoCopiarLink"
-            onclick="copiarLinkLoja()">
+                    if (navigator.clipboard && window.isSecureContext) {
 
-            <i class="fa-solid fa-copy me-2"></i>
-            Copiar link
+                        await navigator.clipboard.writeText(campoLink.value);
 
-        </button>
+                    } else {
 
-        <a
-    href="https://wa.me/?text=<?php
-        echo urlencode(
-            'Conheça minha loja na Vitrine Digital: ' .
-            $link_loja_publica
-        );
-    ?>"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="btn btn-success"
->
-    <i class="fab fa-whatsapp"></i>
-    Compartilhar no WhatsApp
-    </a>
+                        campoLink.focus();
+                        campoLink.select();
+                        campoLink.setSelectionRange(0, 99999);
 
-    </div>
+                        const copiado = document.execCommand('copy');
 
-    <p
-        id="mensagemCopiaLink"
-        class="small mt-2 mb-0"
-        role="status"
-        aria-live="polite">
-    </p>
+                        if (!copiado) {
+                            throw new Error('Não foi possível copiar automaticamente.');
+                        }
 
-</div>
+                    }
 
+                    mensagem.textContent = 'Link copiado com sucesso!';
+                    mensagem.className = 'small text-success mt-2 mb-0';
 
-<script>
+                } catch (erro) {
 
-    async function copiarLinkLoja() {
+                    campoLink.focus();
+                    campoLink.select();
 
-        const campoLink = document.getElementById('linkLojaPublica');
-        const mensagem = document.getElementById('mensagemCopiaLink');
+                    mensagem.textContent = 'Não foi possível copiar automaticamente. Selecione o link e copie manualmente.';
+                    mensagem.className = 'small text-warning mt-2 mb-0';
 
-        try {
-
-            if (navigator.clipboard && window.isSecureContext) {
-
-                await navigator.clipboard.writeText(campoLink.value);
-
-            } else {
-
-                campoLink.focus();
-                campoLink.select();
-                campoLink.setSelectionRange(0, 99999);
-
-                const copiado = document.execCommand('copy');
-
-                if (!copiado) {
-                    throw new Error('Não foi possível copiar automaticamente.');
                 }
 
             }
 
-            mensagem.textContent = 'Link copiado com sucesso!';
-            mensagem.className = 'small text-success mt-2 mb-0';
+        </script>
 
-        } catch (erro) {
-
-            campoLink.focus();
-            campoLink.select();
-
-            mensagem.textContent = 'Não foi possível copiar automaticamente. Selecione o link e copie manualmente.';
-            mensagem.className = 'small text-warning mt-2 mb-0';
-
-        }
-
-    }
-
-</script>
 
         <!-- INFORMAÇÃO -->
 

@@ -333,7 +333,7 @@ body {
             <div class="col-lg-6 text-center">
 
                 <img
-                    src="img/banner.png"
+                    src="img/fotoindex.jpg"
                     class="img-fluid"
                     style="max-height:420px;"
                     alt="Ilustração da Vitrine Digital">
